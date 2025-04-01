@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team - LCS Project</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Embedded CSS */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+        background: #ffffff; /* Matches index.html */
+        color: #2c3e50;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: #2c3e50; /* Matches index.html */
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      .navbar-brand {
+        font-size: 1.8rem;
+        color: #3498db !important;
+        font-weight: 700;
+      }
+      .navbar .nav-link {
+        color: #ffffff !important;
+        font-weight: 700;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .navbar .nav-link:hover {
+        color: #e74c3c !important;
+        transform: translateY(-3px);
+      }
+      .btn-primary {
+        background: #3498db; /* Matches index.html */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .btn-primary:hover {
+        transform: scale(1.1);
+        background: #2980b9;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 60vh;
+        background: url("https://images.unsplash.com/photo-1699891730676-037bed3c1bed?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        padding-top: 60px; /* Space for fixed navbar */
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(52, 152, 219, 0.7),
+          rgba(250, 246, 246, 0.7)
+        ); /* #3498DB to #E74C3C */
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+      .hero p {
+        font-size: 1.5rem;
+        color: #f5f5f5;
+      }
+
+      /* Team Section */
+      main {
+        padding: 60px 0;
+        flex: 1; /* Ensures footer stays at bottom */
+        background: #f5f5f5; /* Matches index.html sections */
+      }
+      .team-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .team-card {
+        background: rgba(255, 255, 255, 0.9); /* #FFFFFF with glass effect */
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.5s, box-shadow 0.5s;
+        opacity: 0;
+        transform: translateY(50px);
+        overflow: hidden;
+        position: relative;
+      }
+      .team-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .team-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+      .team-card img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #3498db;
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+      }
+      .team-card:hover img {
+        transform: scale(1.1);
+      }
+      .team-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #e74c3c;
+        margin: 10px 0;
+      }
+      .team-role {
+        font-size: 1.2rem;
+        color: #3498db;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .team-desc {
+        font-size: 1rem;
+        color: #2c3e50;
+      }
+
+      /* Footer */
+      footer {
+        background: #2c3e50;
+        padding: 20px 0;
+        font-size: 1.1rem;
+        color: #f5f5f5;
+        text-align: center;
+        width: 100%;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero p {
+          font-size: 1.2rem;
+        }
+        .team-card {
+          margin: 15px 0;
+        }
+        .team-card img {
+          width: 120px;
+          height: 120px;
+        }
+        .team-name {
+          font-size: 1.5rem;
+        }
+        .team-role {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">LCS</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#signin">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-primary text-white ms-2"
+                href="calculator.html"
+                >LCS Calculator</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content container">
+        <h1>Meet Our Team</h1>
+        <p>The Minds Behind the LCS Project</p>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <main>
+      <div class="team-container container">
+        <div class="row">
+          <!-- Team Member 1 -->
+          <div class="col-md-3 col-sm-6">
+            <div class="team-card">
+              <img src="#Avadhesh.png" alt="-" />
+              <h3 class="team-name">Avadhesh shah</h3>
+              <p class="team-role">(22MIP10004)</p>
+              <p class="team-desc">
+                Avadhesh drives the vision of the LCS project, ensuring every
+                detail of making algorithms accessible.
+              </p>
+            </div>
+          </div>
+          <!-- Team Member 2 -->
+          <div class="col-md-3 col-sm-6">
+            <div class="team-card">
+              <img src="#Avadhesh.png" alt="-" />
+              <h3 class="team-name">Gunjan</h3>
+              <p class="team-role">(23MIM10058)</p>
+              <p class="team-desc">
+                Gunjan crafts the core LCS logic, turning complex concepts into
+                practical.
+              </p>
+            </div>
+          </div>
+          <!-- Team Member 3 -->
+          <div class="col-md-3 col-sm-6">
+            <div class="team-card">
+              <img src="#Avadhesh.png" alt="-" />
+              <h3 class="team-name">Shreya Saini</h3>
+              <p class="team-role">(23BCE10505)</p>
+              <p class="team-desc">
+                Shreya brings the site to life with stunning visuals and a
+                modern, intuitive design.
+              </p>
+            </div>
+          </div>
+          <!-- Team Member 4 -->
+          <div class="col-md-3 col-sm-6">
+            <div class="team-card">
+              <img src="#Avadhesh.png" alt="-" />
+              <h3 class="team-name">Anshuman Kas.</h3>
+              <p class="team-role">(23BEY10083)</p>
+              <p class="team-desc">
+                Anshuman writes engaging content, making LCS approachable and
+                inspiring.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 LCS Project - Powered by Our Team</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Embedded JavaScript -->
+    <script>
+      // Scroll reveal for team cards
+      const cards = document.querySelectorAll(".team-card");
+      window.addEventListener("scroll", () => {
+        cards.forEach((card) => {
+          const cardTop = card.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+          if (cardTop < windowHeight - 100) {
+            card.classList.add("visible");
+          }
+        });
+      });
+
+      // Trigger initial visibility check
+      cards.forEach((card) => {
+        if (card.getBoundingClientRect().top < window.innerHeight - 100) {
+          card.classList.add("visible");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Longest Common Subsequence</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Embedded CSS */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+        background: #ffffff; /* Matches all pages */
+        color: #2c3e50;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: #2c3e50; /* Matches all pages */
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      .navbar-brand {
+        font-size: 1.8rem;
+        color: #3498db !important;
+        font-weight: 700;
+      }
+      .navbar .nav-link {
+        color: #ffffff !important;
+        font-weight: 700;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .navbar .nav-link:hover {
+        color: #e74c3c !important;
+        transform: translateY(-3px);
+      }
+      .btn-primary {
+        background: #3498db; /* Matches all pages */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .btn-primary:hover {
+        transform: scale(1.1);
+        background: #2980b9;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        background: url("https://images.unsplash.com/photo-1699891730676-037bed3c1bed?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        padding-top: 60px; /* Space for fixed navbar */
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(52, 152, 219, 0.7),
+          rgba(250, 246, 246, 0.7)
+        ); /* #3498DB to #E74C3C */
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+      }
+      .hero p {
+        font-size: 1.5rem;
+        color: #f5f5f5;
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+        animation-delay: 0.5s;
+      }
+      #welcomeMessage {
+        font-size: 1.5rem;
+        color: #e74c3c;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        display: none;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .btn-hero {
+        background: linear-gradient(45deg, #3498db, #e74c3c);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        color: #ffffff;
+        font-weight: 700;
+        transition: transform 0.3s, background 0.3s;
+      }
+      .btn-hero:hover {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #e74c3c, #3498db);
+      }
+
+      /* Main Content */
+      main {
+        padding: 60px 0;
+        flex: 1; /* Ensures footer stays at bottom */
+        background: #f5f5f5; /* Matches all pages */
+      }
+      .content-card {
+        background: rgba(255, 255, 255, 0.9); /* #FFFFFF with glass effect */
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 40px;
+        margin: 20px 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s, box-shadow 0.5s;
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      .content-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .content-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+      .section-title {
+        font-size: 2.5rem;
+        color: #e74c3c;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      .section-icon {
+        color: #3498db;
+        transition: transform 0.3s;
+      }
+      .content-card:hover .section-icon {
+        transform: rotate(15deg) scale(1.2);
+      }
+      .content-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #2c3e50;
+      }
+      .content-text a.btn {
+        background: #3498db;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        color: #ffffff;
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .content-text a.btn:hover {
+        transform: scale(1.1);
+        background: #2980b9;
+      }
+
+      /* Footer */
+      footer {
+        background: #2c3e50;
+        padding: 20px 0;
+        font-size: 1.1rem;
+        color: #f5f5f5;
+        text-align: center;
+        width: 100%;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero p,
+        #welcomeMessage {
+          font-size: 1.2rem;
+        }
+        .content-card {
+          padding: 20px;
+        }
+        .section-title {
+          font-size: 2rem;
+        }
+        .section-icon {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">LCS</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="team.html">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="authLink" href="signin.html">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-primary text-white ms-2"
+                href="calculator.html"
+                >LCS Calculator</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-content container">
+        <h1>Discover the Power of Longest Common Subsequence</h1>
+        <p id="subheading">Unlocking Solutions in Algorithms and Beyond</p>
+        <p id="welcomeMessage">Welcome back!</p>
+        <a href="#section1" class="btn btn-hero mt-3">Learn More</a>
+      </div>
+    </section>
+
+    <!-- Main Content Sections (All 10 Points with Icons) -->
+    <main class="container">
+      <section id="section1" class="content-card row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-link fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">
+            1. What is the Longest Common Subsequence?
+          </h2>
+          <p class="content-text">
+            The Longest Common Subsequence (LCS) is a classic algorithm used to
+            find the longest sequence of characters that appear in the same
+            relative order in two given strings. The key point is that the
+            characters of the subsequence do not need to be contiguous in the
+            original strings.
+            <b>
+              <br />
+              <br />
+              String 1: "ACDBE"
+              <br />
+              String 2: "ABCDE"
+              <br />
+              <br />
+              So, the length of LCS = 4.
+            </b>
+          </p>
+        </div>
+      </section>
+
+      <section id="section2" class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">2. How Does LCS Work?</h2>
+          <p class="content-text">
+            The Longest Common Subsequence (LCS) algorithm works by comparing
+            two given sequences and identifying the longest sequence of
+            characters that appear in the same order without necessarily being
+            consecutive.
+
+            <b
+              ><br />
+              <br />
+              Steps :
+              <br />
+              1. Compare characters
+              <br />
+              2. Rescurive approaches
+              <br />
+              3. Dynamic Programming Approach (Optimized Solution) - use 2D
+              Table</b
+            >
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-table fa-5x section-icon"></i>
+        </div>
+      </section>
+
+      <section id="section3" class="content-card row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-globe fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">3. LCS in the Real World</h2>
+          <p class="content-text">
+            LCS powers applications like:<br />
+            - <strong>Text Comparison & Plagiarism Detection</strong>: Tools
+            like 'diff' for file differences.<br />
+            - <strong> Bioinformatics & DNA Sequence Alignment</strong>: DNA
+            sequence alignment.<br />
+            - <strong>Version Control Systems (Git, SVN, Mercurial)</strong>:
+            Reconciling code changes in Git.<br />
+            - <strong>Spell Checkers & Auto-Correct Systems</strong>: Detecting
+            similar words.<br />
+            - <strong>Speech Recognition & Audio Pattern Matching</strong>:
+            Matching audio patterns.
+          </p>
+        </div>
+      </section>
+
+      <section id="section4" class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">4. Algorithms for LCS</h2>
+          <p class="content-text">
+            Several approaches exist:<br />
+            - <strong>Dynamic Programming</strong>: O(nm) time complexity.<br />
+            - <strong>Recursive</strong>: Exponential time but simple.<br />
+            - <strong>Hirschberg’s Algorithm</strong>: Space-efficient.<br />
+            - <strong>Greedy Heuristics</strong>: Approximate solutions.
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-cogs fa-5x section-icon"></i>
+        </div>
+      </section>
+
+      <section id="section5" class="content-card row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-lightbulb fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">5. Cutting-Edge LCS Innovations</h2>
+          <p class="content-text">
+            Recent advancements include:<br />
+            - <strong>Hyper-Heuristics</strong>: Combining heuristics (2022).<br />
+            - <strong>Parallel Computing</strong>: Speeding up LCS on GPUs.<br />
+            - <strong>Machine Learning</strong>: Predicting LCS patterns.
+          </p>
+        </div>
+      </section>
+
+      <section id="section6" class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">6. LCS in Action: Recent Projects</h2>
+          <p class="content-text">
+            Examples:<br />
+            - <strong>GitHub Diff Engine</strong>: Enhanced LCS for code.<br />
+            - <strong>GenBank</strong>: DNA sequence analysis.<br />
+            - <strong>Plagiarism Detectors</strong>: Academic tools.<br />
+            - <strong>Speech-to-Text</strong>: Google’s transcription.
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-project-diagram fa-5x section-icon"></i>
+        </div>
+      </section>
+
+      <section id="section7" class="content-card row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-file-pdf fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">7. Dive Deeper with Research</h2>
+          <p class="content-text">
+            Download this Scopus-indexed paper:<br />
+            - <strong>Title</strong>: 'Longest common substring in LCS solution
+            service: A novel hyper-heuristic'<br />
+            - <strong>Published</strong>: 2022, ScienceDirect<br />
+            - <a href="#" class="btn btn-primary mt-2">Download PDF</a> (Check
+            library for access)
+          </p>
+        </div>
+      </section>
+
+      <section id="section8" class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">8. Insights from Recent Research</h2>
+          <p class="content-text">
+            Key points from the 2022 paper:<br />
+            1. Hyper-heuristic selects best LCS solver.<br />
+            2. New classifier with 98% accuracy.<br />
+            3. Outperforms on uncorrelated datasets.<br />
+            4. Reduces runtime significantly.<br />
+            5. Adaptive LCS algorithms proposed.
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-list-ul fa-5x section-icon"></i>
+        </div>
+      </section>
+
+      <section id="section9" class="content-card row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-forward fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">9. The Future of LCS</h2>
+          <p class="content-text">
+            Potential developments:<br />
+            - <strong>Quantum Computing</strong>: Faster solutions.<br />
+            - <strong>AI Integration</strong>: Smarter heuristics.<br />
+            - <strong>Big Data</strong>: Scaling LCS.<br />
+            - <strong>Cross-Disciplinary</strong>: Robotics use.
+          </p>
+        </div>
+      </section>
+
+      <section id="section10" class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">10. References & Further Reading</h2>
+          <p class="content-text">
+            Sources:<br />
+            - Wikipedia: 'Longest common subsequence'<br />
+            - ScienceDirect: 'LCS solution service' (2022)<br />
+            - Book: 'Introduction to Algorithms' by Cormen<br />
+            - Article: 'Responsive Web Design' (IJCA, 2016)<br />
+            - Web: Kinsta’s 'Guide to Responsive Design' (2024)
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-book fa-5x section-icon"></i>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 LCS Project - Explore the Future</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Embedded JavaScript -->
+    <script>
+      // Handle sign-in status
+      window.onload = function () {
+        const isSignedIn = localStorage.getItem("isSignedIn");
+        const authLink = document.getElementById("authLink");
+        const welcomeMessage = document.getElementById("welcomeMessage");
+
+        if (isSignedIn === "true") {
+          authLink.textContent = "Sign Out";
+          authLink.href = "#";
+          authLink.onclick = function () {
+            localStorage.removeItem("isSignedIn");
+            authLink.textContent = "Sign In";
+            authLink.href = "signin.html";
+            welcomeMessage.style.display = "none";
+            return false;
+          };
+          welcomeMessage.style.display = "block";
+        }
+
+        // Animate subheading
+        const subheadings = [
+          "Unlocking Solutions in Algorithms and Beyond",
+          "Where Innovation Meets Code",
+          "Explore LCS Today",
+        ];
+        let index = 0;
+        const subheading = document.getElementById("subheading");
+        function animateSubheading() {
+          subheading.style.opacity = 0;
+          setTimeout(() => {
+            subheading.textContent = subheadings[index];
+            subheading.style.opacity = 1;
+            index = (index + 1) % subheadings.length;
+          }, 600);
+        }
+        animateSubheading(); // Initial call
+        setInterval(animateSubheading, 4000);
+      };
+
+      // Scroll reveal for content cards
+      const cards = document.querySelectorAll(".content-card");
+      window.addEventListener("scroll", () => {
+        cards.forEach((card) => {
+          const cardTop = card.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+          if (cardTop < windowHeight - 100) {
+            card.classList.add("visible");
+          }
+        });
+      });
+
+      // Trigger initial visibility check
+      cards.forEach((card) => {
+        if (card.getBoundingClientRect().top < window.innerHeight - 100) {
+          card.classList.add("visible");
+        }
+      });
+    </script>
+  </body>
+</html>

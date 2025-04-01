@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About LCS - Matching Design</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Embedded CSS */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+        background: #ffffff; /* Matches index.html */
+        color: #2c3e50;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: #2c3e50; /* Matches index.html */
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      .navbar-brand {
+        font-size: 1.8rem;
+        color: #3498db !important;
+        font-weight: 700;
+      }
+      .navbar .nav-link {
+        color: #ffffff !important;
+        font-weight: 700;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .navbar .nav-link:hover {
+        color: #e74c3c !important;
+        transform: translateY(-3px);
+      }
+      .btn-primary {
+        background: #3498db; /* Matches index.html */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .btn-primary:hover {
+        transform: scale(1.1);
+        background: #2980b9;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        background: url("https://images.unsplash.com/photo-1699891730676-037bed3c1bed?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        padding-top: 60px; /* Space for fixed navbar */
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(52, 152, 219, 0.7),
+          rgba(249, 247, 247, 0.7)
+        ); /* #3498DB to #E74C3C */
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+      .hero p {
+        font-size: 1.5rem;
+        color: #f5f5f5;
+        transition: opacity 0.5s;
+      }
+      .animated-text {
+        opacity: 0;
+      }
+
+      /* Main Content */
+      main {
+        padding: 60px 0;
+        flex: 1; /* Ensures footer stays at bottom */
+      }
+      .content-card {
+        background: rgba(245, 245, 245, 0.9); /* #F5F5F5 with glass effect */
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 40px;
+        margin: 20px 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s, box-shadow 0.5s;
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      .content-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .content-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+      .content-card.bg-light {
+        background: rgba(255, 255, 255, 0.9); /* #FFFFFF with glass effect */
+      }
+      .section-title {
+        font-size: 2.5rem;
+        color: #e74c3c;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      .section-icon {
+        color: #3498db;
+        margin-bottom: 20px;
+        transition: transform 0.3s;
+      }
+      .content-card:hover .section-icon {
+        transform: rotate(15deg) scale(1.2);
+      }
+      .content-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #2c3e50;
+      }
+
+      /* Footer */
+      footer {
+        background: #2c3e50;
+        padding: 20px 0;
+        font-size: 1.1rem;
+        color: #f5f5f5;
+        text-align: center;
+        width: 100%;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero p {
+          font-size: 1.2rem;
+        }
+        .content-card {
+          padding: 20px;
+        }
+        .section-title {
+          font-size: 2rem;
+        }
+        .hero {
+          padding-top: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">LCS</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#team">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#signin">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-primary text-white ms-2"
+                href="calculator.html"
+                >LCS Calculator</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content container">
+        <h1 class="animated-text">About Longest Common Subsequence</h1>
+        <p class="animated-text" id="about-subheading">
+         <h1> Unlocking the Power of Algorithms</h1>
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+      <section class="content-card bg-light row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-link fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">What is LCS?</h2>
+          <p class="content-text">
+            The Longest Common Subsequence (LCS) is a problem in computer science that involves finding the longest sequence of characters that appear in the same order in two or more sequences, with gaps allowed. Unlike substrings, the characters in the subsequence do not need to be contiguous, but must maintain their relative order.
+            <br>
+            <br>
+
+<b>LCS is widely used in text comparison, DNA sequence alignment</b> .
+          </p>
+        </div>
+      </section>
+
+      <section class="content-card row align-items-center">
+        <div class="col-md-8">
+          <h2 class="section-title">Our Mission</h2>
+          <p class="content-text">
+            We’re here to make LCS (Longest Common Subsequence) easy to understand and use. This site gives you simple explanations, useful tools, and insights, all designed to help you learn and apply LCS in real-world scenarios.
+            <br>
+            <br>
+
+<b>Our goal is to help you master LCS and use it in practical ways, whether you’re a student, developer, or researcher. We make it simple, clear, and fun to explore! 🌟.</b>
+          </p>
+        </div>
+        <div class="col-md-4 text-center">
+          <i class="fas fa-bullseye fa-5x section-icon"></i>
+        </div>
+      </section>
+
+      <section class="content-card bg-light row align-items-center">
+        <div class="col-md-4 text-center">
+          <i class="fas fa-graduation-cap fa-5x section-icon"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="section-title">Why It Matters</h2>
+          <p class="content-text">
+            CS isn’t just about writing code—it’s a powerful tool for understanding and solving complex problems. Whether you’re a beginner or an expert, this platform provides the resources and space to learn, experiment, and push the limits of what’s possible with this timeless algorithm.
+            <br>
+            <br>
+
+<b>By mastering LCS, you unlock the ability to solve real-world challenges in text comparison, bioinformatics, version control, and more, making it an essential skill in the digital world.</b>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 LCS Project - Powered by Curiosity</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Embedded JavaScript -->
+    <script>
+      // Animate hero text
+      const subheadings = [
+        "Unlocking the Power of Algorithms",
+        "Where Logic Meets Innovation",
+        "Explore the World of LCS",
+      ];
+      let index = 0;
+
+      function animateSubheading() {
+        const subheading = document.getElementById("about-subheading");
+        subheading.classList.remove("animated-text");
+        subheading.style.opacity = 0;
+        setTimeout(() => {
+          subheading.textContent = subheadings[index];
+          subheading.classList.add("animated-text");
+          subheading.style.opacity = 1;
+          index = (index + 1) % subheadings.length;
+        }, 600); // Smooth transition
+      }
+
+      // Initial animation
+      animateSubheading();
+      setInterval(animateSubheading, 4000); // Change every 4 seconds
+
+      // Scroll reveal for content cards
+      const cards = document.querySelectorAll(".content-card");
+      window.addEventListener("scroll", () => {
+        cards.forEach((card) => {
+          const cardTop = card.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+          if (cardTop < windowHeight - 100) {
+            card.classList.add("visible");
+          }
+        });
+      });
+
+      // Trigger initial visibility check
+      cards.forEach((card) => {
+        if (card.getBoundingClientRect().top < window.innerHeight - 100) {
+          card.classList.add("visible");
+        }
+      });
+    </script>
+  </body>
+</html>
