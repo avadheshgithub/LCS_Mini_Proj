@@ -1,0 +1,1 @@
+# LCS_Mini_Proj
