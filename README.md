@@ -32,6 +32,8 @@ This project demonstrates the **Longest Common Subsequence (LCS)** algorithm usi
       
       Output: LCS = "ABDF", Length = 4
 
+      LCS = "ABDF"
+
 
 ---
 
