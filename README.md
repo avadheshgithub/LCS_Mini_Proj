@@ -19,7 +19,7 @@ https://avadheshgithub.github.io/LCS_Mini_Proj/
 
 ## 📖 About The Project
 
-This project demonstrates the **Longest Common Subsequence (LCS)** algorithm using **Dynamic Programming**. It is part of the **Design and Analysis of Algorithms (DAA)** curriculum and helps understand optimal substructure and overlapping subproblem.
+This project demonstrates the **Longest Common Subsequence (LCS)** algorithm using **Dynamic Programming**. It is part of the **Design and Analysis of Algorithms (DAA)** curriculum and helps understand optimal substructure and overlapping subproblems.
 
 ---
 
