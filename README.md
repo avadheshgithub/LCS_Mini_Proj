@@ -25,7 +25,7 @@ This project demonstrates the **Longest Common Subsequence (LCS)** algorithm usi
 
 ## 🧠 What is LCS?
 
-> The Longest Common Subsequence (LCS) is the longest sequence which appears **in the same order** in both strings but not necessarily **contiguously**.
+> The Longest Common Subsequence (LCS) is the longest sequence that appears **in the same order** in both strings but not necessarily **contiguously**.
 
 ### 🧪 Example
       Input: X = "ABCDEF" Y = "AEBDF"
